@@ -6,7 +6,7 @@ const async = require('async');
 const { body, validationResult} = require('express-validator');
 
 exports.post_list = (req, res, next) => {
-    Post.find()
+    Post.find({published: true})
     .populate('user')
     .sort({'timestamp': 'Ascending'})
     .exec((err, posts) => {
@@ -75,6 +75,12 @@ exports.post_create = [
     body('title')
     .trim()
     .isLength({min:1}).withMessage('Title must not be empty.'),
+    body('call')
+    .trim()
+    .isLength({min:1}).withMessage('Title must not be empty.'),
+    body('cover')
+    .trim()
+    .isLength({min:1}).withMessage('Cover must not be empty'),
     body('content')
     .trim()
     .isLength({min:1}).withMessage('Content must not be empty.'),
@@ -84,8 +90,8 @@ exports.post_create = [
         if(!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()});
         }
-        const {title, content} = req.body;
-        Post.create({user: req.user._id, title, content, published: false}, (err, post) =>{
+        const {title, call, cover, content} = req.body;
+        Post.create({user: req.user._id, title, call, cover, content, published: false}, (err, post) =>{
             if(err){
                 return res.status(400).json({error: err.message});
             }
@@ -100,6 +106,12 @@ exports.post_update = [
     body('title')
     .trim()
     .isLength({min:1}).withMessage('Title must not be empty.'),
+    body('call')
+    .trim()
+    .isLength({min:1}).withMessage('Title must not be empty.'),
+    body('cover')
+    .trim()
+    .isLength({min:1}).withMessage('Cover must not be empty'),
     body('content')
     .trim()
     .isLength({min:1}).withMessage('Content must not be empty.'),
@@ -112,8 +124,8 @@ exports.post_update = [
         if(!errors.isEmpty()){
             return res.status(400).json({errors: errors.array()});
         }
-        const {title, content} = req.body;
-        Post.findByIdAndUpdate({_id: req.params.id}, {title, content}, {useFindAndModify: false, new: true}, (err, updatedPost) => {
+        const {title, call, cover, content} = req.body;
+        Post.findByIdAndUpdate({_id: req.params.id}, {title, call, cover, content}, {useFindAndModify: false, new: true}, (err, updatedPost) => {
             if(err){
                 return res.status(400).json({error: err.message});
             }

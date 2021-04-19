@@ -42,7 +42,8 @@ exports.sign_up = (req, res, next) => {
             if(err){
                 return res.status(400).json({error: err.message});
             }
-            User.create({isAdmin: false,username: req.body.username, email: req.body.email, password: newPass}, (err, user) => {
+            const {username, email, icon_id} = req.body;
+            User.create({username, email, password: newPass, icon_id, isAdmin: false}, (err, user) => {
                 if(err){
                     return res.status(500).json({error: err.message});
                 }
