@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const passport = require('passport');
 const mongoose = require('mongoose');
+const {body, validationResult} = require('express-validator');
 
 
 exports.user_list = (req, res, next) => {
@@ -76,4 +77,16 @@ exports.log_in = (req, res, next) => {
           res.json({token: token, user: {_id: user._id, email: user.email, username: user.username, icon_id: user.icon_id}});
         });
       })(req, res);
+}
+
+exports.user_delete = (req, res, next) => {
+    if(!mongoose.Types.ObjectId.isValid(req.params.id)){
+        return res.status(400).json({error: 'ObjectID not valid.'});
+    }
+    User.findOneAndDelete({_id: req.params.id}, (err, deleted) => {
+        if(err) {
+            return res.status(400).json({error: err.message});
+        }
+        res.status(200).json(deleted);
+    });
 }
