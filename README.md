@@ -2,7 +2,7 @@
 
 A RestFull Blog Api made using Node.js / Express.
 
-Look at Blog client [here](https://github.com/ZASUO01/Blog-Api)
+Look at Blog client [here](https://github.com/ZASUO01/Blog-Client)
 ## Development
 - Application made with Node.js / Express.
 - MongoDB database and mongoose ODM
